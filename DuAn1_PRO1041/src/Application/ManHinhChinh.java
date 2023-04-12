@@ -30,14 +30,7 @@ public class ManHinhChinh extends javax.swing.JFrame {
     
     public ManHinhChinh() {
         initComponents();
-//        setBackground(new Color(0, 0, 0, 0));
-
-        pt = new QuanLyPhongTro();
-        hdp = new QuanLyHoaDonPhong();
-        hd = new QuanLyHopDong();
-        kh = new QuanLyKhachHang();
-        ts = new QuanLyTaiSan();
-        hddn = new QuanLyHoaDonDienNuoc();
+//        setBackground(new Color(0, 0, 0, 0));          
 //        setForm(home.getRootPane());
 
         menu.initMoving(ManHinhChinh.this);
@@ -45,16 +38,22 @@ public class ManHinhChinh extends javax.swing.JFrame {
             @Override
             public void selected(int index) {
                 if(index == 0) {
+                    pt = new QuanLyPhongTro();
                     setForm(pt.getRootPane());
                 }else if(index == 2) {
+                    hd = new QuanLyHopDong();
                     setForm(hd.getRootPane());
                 }else if(index == 4) {
+                    kh = new QuanLyKhachHang();
                     setForm(kh.getRootPane());
                 }else if(index == 6) {
+                    hddn = new QuanLyHoaDonDienNuoc();
                     setForm(hddn.getRootPane());
                 }else if(index == 8){
+                    hdp = new QuanLyHoaDonPhong();
                     setForm(hdp.getRootPane());
                 }else if(index == 10) {
+                    ts = new QuanLyTaiSan();
                     setForm(ts.getRootPane());
                 }else if(index == 12) {
                     
