@@ -48,6 +48,8 @@ public interface IHopDongService {
     List<TaiSan> getListTS();
 
     String add(HopDong hd);
+    
+    String addKH(KhachHang kh);
 
     String addHDTS(HopDongTaiSan hdts);
 

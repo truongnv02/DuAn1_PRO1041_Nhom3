@@ -49,6 +49,8 @@ public interface IHopDongRepository {
 
     boolean add(HopDong hd);
     
+    boolean addKH(KhachHang kh);
+    
     boolean addHDTS(HopDongTaiSan hdts);
 
     boolean update(HopDong hd, String idHD);

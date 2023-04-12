@@ -42,13 +42,6 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
         showDataTable(lists);
     }
 
-    private KhachHang getSDT() {
-        KhachHang kh = new KhachHang();
-        UUID id = UUID.randomUUID();
-        kh.setId(String.valueOf(id));
-        kh.setSdt(txtSDT.getText());
-        return kh;
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -82,6 +75,7 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
         tblListKH = new javax.swing.JTable();
         btnThem = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
+        btnXoa = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
 
@@ -163,6 +157,13 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
             }
         });
 
+        btnXoa.setText("Xóa");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
+
         jLabel10.setText("Nhập SDT Khách Hàng cần tìm: ");
 
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -218,7 +219,9 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnThem)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnSua))))
+                                .addComponent(btnSua)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnXoa))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(288, 288, 288)
                         .addComponent(jLabel1)))
@@ -258,6 +261,7 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
                     .addComponent(txtDiaChi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnXoa)
                     .addComponent(btnThem)
                     .addComponent(btnSua))
                 .addGap(23, 23, 23)
@@ -274,14 +278,28 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
+        if (txtMa.getText().trim().isEmpty()
+                && txtTen.getText().trim().isEmpty()
+                && txtCCCD.getText().trim().isEmpty()
+                && txtNgaySinh.getText().trim().isEmpty()
+                && txtEmail.getText().trim().isEmpty()
+                && txtDiaChi.getText().trim().isEmpty()
+                && !txtSDT.getText().trim().isEmpty()) {
+            KhachHang kh = getDataFromView();
+            service.addNhanh(kh);
+            lists = service.getAll();
+            showDataTable(lists);
+            return;
+        }
         if (checkData()) {
-            if (checkMa()) {
+            if (checkMa() && checkCCCD(txtCCCD.getText().trim()) && checkEmail(txtEmail.getText().trim()) && checkSDT(txtSDT.getText().trim())) {
                 KhachHang kh = getDataFromView();
                 service.add(kh);
                 lists = service.getAll();
                 showDataTable(lists);
             }
         }
+
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
@@ -291,23 +309,75 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
             lists = service.getAll();
             String id = lists.get(index).getId();
             String ma = lists.get(index).getMa();
+            String cccd = lists.get(index).getCccd();
+            String email = lists.get(index).getEmail();
+            String sdt = lists.get(index).getSdt();
             KhachHang kh = getDataFromView();
-            if (ma.equalsIgnoreCase(kh.getMa())) {
+            if (ma == null) {
                 if (checkData()) {
                     service.update(kh, id);
                     lists = service.getAll();
                     showDataTable(lists);
+                    return;
                 }
-            } else {
+            } else if (!ma.equalsIgnoreCase(kh.getMa())) {
                 if (checkData()) {
-                    service.update(kh, id);
-                    lists = service.getAll();
-                    showDataTable(lists);
+                    if (checkMa()) {
+                        service.update(kh, id);
+                        lists = service.getAll();
+                        showDataTable(lists);
+                        return;
+                    }
                 }
             }
+            if (!cccd.equalsIgnoreCase(kh.getCccd())) {
+                if (checkData()) {
+                    if (checkCCCD(cccd)) {
+                        service.update(kh, id);
+                        lists = service.getAll();
+                        showDataTable(lists);
+                        return;
+                    }
+                }
+            }
+            if (!email.equalsIgnoreCase(kh.getEmail())) {
+                if (checkData()) {
+                    if (checkEmail(email)) {
+                        service.update(kh, id);
+                        lists = service.getAll();
+                        showDataTable(lists);
+                        return;
+                    }
+                }
+            }
+            if (!sdt.equalsIgnoreCase(kh.getSdt())) {
+                if (checkData()) {
+                    if (checkSDT(sdt)) {
+                        service.update(kh, id);
+                        lists = service.getAll();
+                        showDataTable(lists);
+                        return;
+                    }
+                }
+            }
+            service.update(kh, id);
+            lists = service.getAll();
+            showDataTable(lists);
         } else
             JOptionPane.showMessageDialog(this, "Vui lòng chọn dòng cần sửa!");
     }//GEN-LAST:event_btnSuaActionPerformed
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+        lists = service.getAll();
+        int index = tblListKH.getSelectedRow();
+        if (index >= 0) {
+            String id = lists.get(index).getId();
+            service.delete(id);
+            lists = service.getAll();
+            showDataTable(lists);
+        }
+    }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
         // TODO add your handling code here:
@@ -350,20 +420,14 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
         } else if (txtCCCD.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "CCCD không được để trống!");
             return false;
-        } else if (!checkCCCD(txtCCCD.getText().trim())) {
-            return false;
         } else if (txtNgaySinh.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ngày Sinh không được để trống!");
             return false;
         } else if (txtEmail.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Email không được để trống!");
             return false;
-        } else if (!checkEmail(txtEmail.getText().trim())) {
-            return false;
         } else if (txtSDT.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "SDT không được để trống!");
-            return false;
-        } else if (!checkSDT(txtSDT.getText().trim())) {
             return false;
         } else if (txtDiaChi.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Địa Chỉ không được để trống!");
@@ -376,6 +440,12 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
     public boolean checkCCCD(String cccd) {
         String kyTu = "\\d{12}";
         if (cccd.matches(kyTu)) {
+            for (KhachHang kh : lists) {
+                if (cccd.equalsIgnoreCase(kh.getCccd())) {
+                    JOptionPane.showMessageDialog(this, "CCCD đã tồn tại!");
+                    return false;
+                }
+            }
             return true;
         } else {
             JOptionPane.showMessageDialog(this, "CCCD không hợp lệ!");
@@ -386,6 +456,12 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
     public boolean checkEmail(String email) {
         String kyTu = "\\w+[@]\\w+([.]\\w+)+";
         if (email.matches(kyTu)) {
+            for (KhachHang kh : lists) {
+                if (email.equalsIgnoreCase(kh.getEmail())) {
+                    JOptionPane.showMessageDialog(this, "Email đã tồn tại!");
+                    return false;
+                }
+            }
             return true;
         } else {
             JOptionPane.showMessageDialog(this, "Email không hợp lệ!");
@@ -396,6 +472,12 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
     public boolean checkSDT(String sdt) {
         String kyTu = "[0]\\d{9}";
         if (sdt.matches(kyTu)) {
+            for (KhachHang kh : lists) {
+                if (sdt.equalsIgnoreCase(kh.getSdt())) {
+                    JOptionPane.showMessageDialog(this, "SDT đã tồn tại!");
+                    return false;
+                }
+            }
             return true;
         } else {
             JOptionPane.showMessageDialog(this, "SDT không hợp lệ!");
@@ -484,6 +566,7 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(QuanLyKhachHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -498,6 +581,7 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
     private javax.swing.JButton btnLamMoi;
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
+    private javax.swing.JButton btnXoa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

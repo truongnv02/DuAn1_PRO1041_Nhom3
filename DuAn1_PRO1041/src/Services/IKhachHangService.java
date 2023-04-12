@@ -18,6 +18,8 @@ public interface IKhachHangService {
     List<String> getListMa();
 
     String add(KhachHang kh);
+    
+    String addNhanh(KhachHang kh);
 
     String update(KhachHang kh, String id);
 

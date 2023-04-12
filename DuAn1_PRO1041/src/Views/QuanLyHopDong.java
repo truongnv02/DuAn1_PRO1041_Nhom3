@@ -53,8 +53,8 @@ public class QuanLyHopDong extends javax.swing.JFrame {
         dtm = (DefaultTableModel) tblListHD.getModel();
         showDataTableHD(lists);
 
-//        dtm = (DefaultTableModel) tblListHDTS.getModel();
-//        showDataTableHDTS(listHDTS);
+        dtm = (DefaultTableModel) tblListHDTS.getModel();
+        showDataTableHDTS(listHDTS);
         dtm = (DefaultTableModel) tblListKH.getModel();
         showDataTableKH(listKH);
         dtm = (DefaultTableModel) tblListPT.getModel();
@@ -189,26 +189,12 @@ public class QuanLyHopDong extends javax.swing.JFrame {
 
         txtPhong.setEnabled(false);
 
-        txtDiaChi.setEnabled(false);
-
-        txtEmail.setEnabled(false);
-
-        txtSDT.setEnabled(false);
-
-        txtNgSinh.setEnabled(false);
-
-        txtTenKH.setEnabled(false);
-
         bgGioiTinh.add(rdoNam);
         rdoNam.setSelected(true);
         rdoNam.setText("Nam");
-        rdoNam.setEnabled(false);
 
         bgGioiTinh.add(rdoNu);
         rdoNu.setText("Nữ");
-        rdoNu.setEnabled(false);
-
-        txtCCCD.setEnabled(false);
 
         txtTang.setEnabled(false);
 
@@ -737,19 +723,48 @@ public class QuanLyHopDong extends javax.swing.JFrame {
 
     private void btnTaoHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoHDActionPerformed
         // TODO add your handling code here:
-        if (checkData()) {
-            if (checkMa()) {
-                HopDong hd = getDataFromView();
-                service.add(hd);
-                for (HopDongTaiSan hdts : listHDTS) {
-                    hdts.setIdHD(hd.getId());
-                    service.addHDTS(hdts);
+        String sdt = txtSDT.getText().trim();
+        listKH = service.getListKH();
+        int dem = 0;
+        for (KhachHang kh : listKH) {
+            if (sdt.equalsIgnoreCase(kh.getSdt())) {
+                dem++;
+                if (checkData()) {
+                    if (checkMa()) {
+                        HopDong hd = getDataFromView();
+                        service.add(hd);
+                        for (HopDongTaiSan hdts : listHDTS) {
+                            hdts.setIdHD(hd.getId());
+                            service.addHDTS(hdts);
+                        }
+                        listHDTS.removeAll(listHDTS);
+                        dtm = (DefaultTableModel) tblListHDTS.getModel();
+                        showDataTableHDTS(listHDTS);
+                        showDataAll();
+                    }
                 }
-                
-                listHDTS.removeAll(listHDTS);
-                dtm = (DefaultTableModel) tblListHDTS.getModel();
-                showDataTableHDTS(listHDTS);
-                showDataAll();
+            }
+        }
+        if (dem == 0) {
+            if (checkDataKH()) {
+                if (checkSDT(txtSDT.getText().trim()) && checkCCCD(txtCCCD.getText().trim()) && checkEmail(txtEmail.getText().trim())) {
+                    KhachHang kh = getDataKHFromView();
+                    service.addKH(kh);
+                }
+                if (checkData()) {
+                    if (checkMa()) {
+                        HopDong hd = getDataFromView();
+                        service.add(hd);
+                        for (HopDongTaiSan hdts : listHDTS) {
+                            hdts.setIdHD(hd.getId());
+                            service.addHDTS(hdts);
+                        }
+                        listHDTS.removeAll(listHDTS);
+                        dtm = (DefaultTableModel) tblListHDTS.getModel();
+                        showDataTableHDTS(listHDTS);
+                        showDataAll();
+                    }
+                }
             }
         }
     }//GEN-LAST:event_btnTaoHDActionPerformed
@@ -824,8 +839,8 @@ public class QuanLyHopDong extends javax.swing.JFrame {
         txtDongTien.setText("");
         txtGiaDien.setText("");
         txtGiaNuoc.setText("");
-//        dcNgTao.setDate(null);
-//        dcNgKT.setDate(null);
+        dcNgTao.setDate(null);
+        dcNgKT.setDate(null);
 
         showDataAll();
         listHDTS.removeAll(listHDTS);
@@ -927,6 +942,29 @@ public class QuanLyHopDong extends javax.swing.JFrame {
         if (txtMaHD.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Mã Hợp Đồng không được bỏ trống!");
             return false;
+        } else if (txtTenKH.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tên Khách Hàng không được bỏ trống!");
+            return false;
+        } else if (txtCCCD.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "CCCD không được để trống!");
+            return false;
+        } else if (txtNgSinh.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ngày Sinh không được để trống!");
+            return false;
+        } else if (txtEmail.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Email không được để trống!");
+            return false;
+        } else if (txtSDT.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "SDT không được để trống!");
+            return false;
+        } else if (txtDiaChi.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Địa Chỉ không được để trống!");
+            return false;
+        } else if (txtPhong.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn Phòng");
+            return false;
+        } else if (!checkPhong()) {
+            return false;
         } else if (txtTienCoc.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tiền Cọc không được bỏ trống!");
             return false;
@@ -981,6 +1019,90 @@ public class QuanLyHopDong extends javax.swing.JFrame {
         }
     }
 
+    public boolean checkPhong() {
+        String phong = txtPhong.getText().trim();
+        lists = service.getAll();
+        for (HopDong hd : lists) {
+            if (phong.equalsIgnoreCase(service.getPTById(hd.getIdPhongTro()).getTen())) {
+                JOptionPane.showMessageDialog(this, "Phòng trọ đã cho thuê!");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean checkDataKH() {
+        if (txtTenKH.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tên Khách Hàng không được để trống!");
+            return false;
+        } else if (txtCCCD.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "CCCD không được để trống!");
+            return false;
+        } else if (txtNgSinh.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ngày Sinh không được để trống!");
+            return false;
+        } else if (txtEmail.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Email không được để trống!");
+            return false;
+        } else if (txtSDT.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "SDT không được để trống!");
+            return false;
+        } else if (txtDiaChi.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Địa Chỉ không được để trống!");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean checkCCCD(String cccd) {
+        String kyTu = "\\d{12}";
+        if (cccd.matches(kyTu)) {
+            for (KhachHang kh : listKH) {
+                if (cccd.equalsIgnoreCase(kh.getCccd())) {
+                    JOptionPane.showMessageDialog(this, "CCCD đã tồn tại!");
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(this, "CCCD không hợp lệ!");
+            return false;
+        }
+    }
+
+    public boolean checkEmail(String email) {
+        String kyTu = "\\w+[@]\\w+([.]\\w+)+";
+        if (email.matches(kyTu)) {
+            for (KhachHang kh : listKH) {
+                if (email.equalsIgnoreCase(kh.getEmail())) {
+                    JOptionPane.showMessageDialog(this, "Email đã tồn tại!");
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(this, "Email không hợp lệ!");
+            return false;
+        }
+    }
+
+    public boolean checkSDT(String sdt) {
+        String kyTu = "[0]\\d{9}";
+        if (sdt.matches(kyTu)) {
+            for (KhachHang kh : listKH) {
+                if (sdt.equalsIgnoreCase(kh.getSdt())) {
+                    JOptionPane.showMessageDialog(this, "SDT đã tồn tại!");
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(this, "SDT không hợp lệ!");
+            return false;
+        }
+    }
+
     public boolean checkMa() {
         String ma = txtMaHD.getText().trim();
         listMa = service.getListMa();
@@ -1006,6 +1128,21 @@ public class QuanLyHopDong extends javax.swing.JFrame {
         String idPT = service.getIdPTByTenPT(txtPhong.getText().trim());
         String idKH = service.getIdKHBySDT(txtSDT.getText().trim());
         return new HopDong(String.valueOf(id), ma, Double.valueOf(tienCoc), Double.valueOf(giaPhong), Double.valueOf(giaDien), Double.valueOf(giaNuoc), ngTao, ngKT, Integer.valueOf(dongTien), idPT, idKH);
+    }
+
+    private KhachHang getDataKHFromView() {
+        UUID id = UUID.randomUUID();
+        String ten = txtTenKH.getText().trim();
+        String cccd = txtCCCD.getText().trim();
+        String ngSinh = txtNgSinh.getText().trim();
+        String email = txtEmail.getText().trim();
+        String sdt = txtSDT.getText().trim();
+        boolean gioiTinh = true;
+        if (rdoNu.isSelected()) {
+            gioiTinh = false;
+        }
+        String diaChi = txtDiaChi.getText().trim();
+        return new KhachHang(String.valueOf(id), null, ten, cccd, Support.toDate(ngSinh, "dd/MM/yyyy"), email, sdt, gioiTinh, diaChi);
     }
 
     public void detailHD(int index) {
@@ -1144,6 +1281,7 @@ public class QuanLyHopDong extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(QuanLyHopDong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

@@ -17,6 +17,7 @@ public class HoaDonDienNuoc {
     private int soDien;
     private int soNuoc;
     private double tongTien;
+    private double tienThieu;
     private Date ngayTao;
     private boolean trangThai;
     private String idKH;
@@ -26,12 +27,13 @@ public class HoaDonDienNuoc {
     public HoaDonDienNuoc() {
     }
 
-    public HoaDonDienNuoc(String id, String ma, int soDien, int soNuoc, double tongTien, Date ngayTao, boolean trangThai, String idKH, String idPhongTro, String idHopDong) {
+    public HoaDonDienNuoc(String id, String ma, int soDien, int soNuoc, double tongTien, double tienThieu, Date ngayTao, boolean trangThai, String idKH, String idPhongTro, String idHopDong) {
         this.id = id;
         this.ma = ma;
         this.soDien = soDien;
         this.soNuoc = soNuoc;
         this.tongTien = tongTien;
+        this.tienThieu = tienThieu;
         this.ngayTao = ngayTao;
         this.trangThai = trangThai;
         this.idKH = idKH;
@@ -77,6 +79,14 @@ public class HoaDonDienNuoc {
 
     public void setTongTien(double tongTien) {
         this.tongTien = tongTien;
+    }
+
+    public double getTienThieu() {
+        return tienThieu;
+    }
+
+    public void setTienThieu(double tienThieu) {
+        this.tienThieu = tienThieu;
     }
 
     public Date getNgayTao() {

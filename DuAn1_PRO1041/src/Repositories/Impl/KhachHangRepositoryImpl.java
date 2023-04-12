@@ -155,4 +155,27 @@ public class KhachHangRepositoryImpl implements IKhachHangRepository {
         return check > 0;
     }
 
+    @Override
+    public boolean addNhanh(KhachHang kh) {
+        int check = 0;
+        String query = """
+                       INSERT INTO [dbo].[Khach_hang]
+                                  ([Id]
+                                  ,[NgaySinh]
+                                  ,[SDT])
+                            VALUES
+                                  (?,?,?)
+                       """;
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setObject(1, kh.getId());
+            ps.setObject(2, "");
+            ps.setObject(3, kh.getSdt());
+            check = ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
+        return check > 0;
+    }
+
 }

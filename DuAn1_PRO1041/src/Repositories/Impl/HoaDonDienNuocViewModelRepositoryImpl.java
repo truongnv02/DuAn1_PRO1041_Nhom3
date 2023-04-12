@@ -24,7 +24,7 @@ public class HoaDonDienNuocViewModelRepositoryImpl implements IHoaDonDienNuocVie
     @Override
     public List<HoaDonDienNuocViewModel> danhSachHoaDonDienNuoc() {
         String query = """
-                       SELECT Hoadon_dien_nuoc.Ma, Phong_tro.TenPhong, Khach_hang.TenKH, Hoadon_dien_nuoc.NgayTao, Hoadon_dien_nuoc.SoDien, Hoadon_dien_nuoc.SoNuoc, Hop_dong.GiaDien, Hop_dong.GiaNuoc, Hoadon_dien_nuoc.TongTien, 
+                       SELECT Hoadon_dien_nuoc.Ma, Phong_tro.TenPhong, Khach_hang.TenKH, Hoadon_dien_nuoc.NgayTao, Hoadon_dien_nuoc.SoDien, Hoadon_dien_nuoc.SoNuoc, Hop_dong.GiaDien, Hop_dong.GiaNuoc, Hoadon_dien_nuoc.TongTien,Hoadon_dien_nuoc.TienThieu, 
                                          Hoadon_dien_nuoc.TrangThai
                        FROM     Hoadon_dien_nuoc INNER JOIN
                                          Hop_dong ON Hoadon_dien_nuoc.IDHopDong = Hop_dong.Id INNER JOIN
@@ -36,7 +36,7 @@ public class HoaDonDienNuocViewModelRepositoryImpl implements IHoaDonDienNuocVie
             List<HoaDonDienNuocViewModel> list = new ArrayList<>();
             int stt = 1;
             while (rs.next()) {
-                HoaDonDienNuocViewModel hddnvm = new HoaDonDienNuocViewModel(stt, rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getInt(5), rs.getInt(6), rs.getDouble(7), rs.getDouble(8), rs.getDouble(9), rs.getBoolean(10));
+                HoaDonDienNuocViewModel hddnvm = new HoaDonDienNuocViewModel(stt, rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getInt(5), rs.getInt(6), rs.getDouble(7), rs.getDouble(8), rs.getDouble(9), rs.getDouble(10), rs.getBoolean(11));
                 list.add(hddnvm);
                 stt++;
             }
@@ -50,12 +50,12 @@ public class HoaDonDienNuocViewModelRepositoryImpl implements IHoaDonDienNuocVie
     @Override
     public List<HoaDonDienNuocViewModel> timTheoTen(String ma) {
         String query = """
-                       SELECT Hoadon_dien_nuoc.Ma, Phong_tro.TenPhong, Khach_hang.TenKH, Hoadon_dien_nuoc.NgayTao, Hoadon_dien_nuoc.SoDien, Hoadon_dien_nuoc.SoNuoc, Hop_dong.GiaDien, Hop_dong.GiaNuoc, Hoadon_dien_nuoc.TongTien, 
-                                    Hoadon_dien_nuoc.TrangThai
-                            FROM    Hoadon_dien_nuoc INNER JOIN
-                                    Hop_dong ON Hoadon_dien_nuoc.IDHopDong = Hop_dong.Id INNER JOIN
-                                        Khach_hang ON Hoadon_dien_nuoc.IDKhachHang = Khach_hang.Id AND Hop_dong.IDKhachHang = Khach_hang.Id INNER JOIN
-                                            Phong_tro ON Hoadon_dien_nuoc.IDPhongTro = Phong_tro.Id AND Hop_dong.IDPhongTro = Phong_tro.Id AND Khach_hang.Id = Phong_tro.IDKhachHang
+                       SELECT Hoadon_dien_nuoc.Ma, Phong_tro.TenPhong, Khach_hang.TenKH, Hoadon_dien_nuoc.NgayTao, Hoadon_dien_nuoc.SoDien, Hoadon_dien_nuoc.SoNuoc, Hop_dong.GiaDien, Hop_dong.GiaNuoc, Hoadon_dien_nuoc.TongTien,Hoadon_dien_nuoc.TienThieu, 
+                                                                Hoadon_dien_nuoc.TrangThai
+                                              FROM     Hoadon_dien_nuoc INNER JOIN
+                                                                Hop_dong ON Hoadon_dien_nuoc.IDHopDong = Hop_dong.Id INNER JOIN
+                                                                Khach_hang ON Hoadon_dien_nuoc.IDKhachHang = Khach_hang.Id AND Hop_dong.IDKhachHang = Khach_hang.Id INNER JOIN
+                                                                Phong_tro ON Hoadon_dien_nuoc.IDPhongTro = Phong_tro.Id AND Hop_dong.IDPhongTro = Phong_tro.Id AND Khach_hang.Id = Phong_tro.IDKhachHang
                        Where Phong_tro.TenPhong like concat ('%',?,'%')
                        """;
         try ( Connection con = DBConnect.getConnection();  PreparedStatement ps = con.prepareStatement(query)) {
@@ -64,7 +64,7 @@ public class HoaDonDienNuocViewModelRepositoryImpl implements IHoaDonDienNuocVie
             List<HoaDonDienNuocViewModel> list = new ArrayList<>();
             int stt = 1;
             while (rs.next()) {
-                HoaDonDienNuocViewModel hddnvm = new HoaDonDienNuocViewModel(stt, rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getInt(5), rs.getInt(6), rs.getDouble(7), rs.getDouble(8), rs.getDouble(9), rs.getBoolean(10));
+                HoaDonDienNuocViewModel hddnvm = new HoaDonDienNuocViewModel(stt, rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getInt(5), rs.getInt(6), rs.getDouble(7), rs.getDouble(8), rs.getDouble(9), rs.getDouble(10), rs.getBoolean(11));
                 list.add(hddnvm);
                 stt++;
             }
@@ -294,12 +294,12 @@ public class HoaDonDienNuocViewModelRepositoryImpl implements IHoaDonDienNuocVie
     @Override
     public List<HoaDonDienNuocViewModel> ListHoaDonDienNuocTT(int trangthai) {
         String query = """
-                       SELECT Hoadon_dien_nuoc.Ma, Phong_tro.TenPhong, Khach_hang.TenKH, Hoadon_dien_nuoc.NgayTao, Hoadon_dien_nuoc.SoDien, Hoadon_dien_nuoc.SoNuoc, Hop_dong.GiaDien, Hop_dong.GiaNuoc, Hoadon_dien_nuoc.TongTien, 
-                                         Hoadon_dien_nuoc.TrangThai
-                       FROM     Hoadon_dien_nuoc INNER JOIN
-                                         Hop_dong ON Hoadon_dien_nuoc.IDHopDong = Hop_dong.Id INNER JOIN
-                                         Khach_hang ON Hoadon_dien_nuoc.IDKhachHang = Khach_hang.Id AND Hop_dong.IDKhachHang = Khach_hang.Id INNER JOIN
-                                         Phong_tro ON Hoadon_dien_nuoc.IDPhongTro = Phong_tro.Id AND Hop_dong.IDPhongTro = Phong_tro.Id AND Khach_hang.Id = Phong_tro.IDKhachHang
+                       SELECT Hoadon_dien_nuoc.Ma, Phong_tro.TenPhong, Khach_hang.TenKH, Hoadon_dien_nuoc.NgayTao, Hoadon_dien_nuoc.SoDien, Hoadon_dien_nuoc.SoNuoc, Hop_dong.GiaDien, Hop_dong.GiaNuoc, Hoadon_dien_nuoc.TongTien,
+                       Hoadon_dien_nuoc.TienThieu, Hoadon_dien_nuoc.TrangThai
+                                FROM     Hoadon_dien_nuoc INNER JOIN
+                                    Hop_dong ON Hoadon_dien_nuoc.IDHopDong = Hop_dong.Id INNER JOIN
+                                    Khach_hang ON Hoadon_dien_nuoc.IDKhachHang = Khach_hang.Id AND Hop_dong.IDKhachHang = Khach_hang.Id INNER JOIN
+                                    Phong_tro ON Hoadon_dien_nuoc.IDPhongTro = Phong_tro.Id AND Hop_dong.IDPhongTro = Phong_tro.Id AND Khach_hang.Id = Phong_tro.IDKhachHang
                        WHERE Hoadon_dien_nuoc.TrangThai = ?
                        ORDER BY Hoadon_dien_nuoc.Ma
                        """;
@@ -309,7 +309,7 @@ public class HoaDonDienNuocViewModelRepositoryImpl implements IHoaDonDienNuocVie
             List<HoaDonDienNuocViewModel> list = new ArrayList<>();
             int stt = 1;
             while (rs.next()) {
-                HoaDonDienNuocViewModel hddnvm = new HoaDonDienNuocViewModel(stt, rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getInt(5), rs.getInt(6), rs.getDouble(7), rs.getDouble(8), rs.getDouble(9), rs.getBoolean(10));
+                HoaDonDienNuocViewModel hddnvm = new HoaDonDienNuocViewModel(stt, rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getInt(5), rs.getInt(6), rs.getDouble(7), rs.getDouble(8), rs.getDouble(9), rs.getDouble(10), rs.getBoolean(11));
                 list.add(hddnvm);
                 stt++;
             }

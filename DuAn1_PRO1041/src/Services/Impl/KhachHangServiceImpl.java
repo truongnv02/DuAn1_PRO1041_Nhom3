@@ -56,4 +56,14 @@ public class KhachHangServiceImpl implements IKhachHangService {
             return "Xóa Khách Hàng thất bại!";
         }
     }
+
+    @Override
+    public String addNhanh(KhachHang kh) {
+        boolean add = khri.addNhanh(kh);
+        if (add) {
+            return "Thêm Khách Hàng nhanh thành công!";
+        } else {
+            return "Thêm Khách Hàng nhanh thất bại!";
+        }
+    }
 }

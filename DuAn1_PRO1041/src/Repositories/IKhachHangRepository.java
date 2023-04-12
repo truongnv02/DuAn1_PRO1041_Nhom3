@@ -18,6 +18,8 @@ public interface IKhachHangRepository {
     List<String> getListMa();
 
     boolean add(KhachHang kh);
+    
+    boolean addNhanh(KhachHang kh);
 
     boolean update(KhachHang kh, String id);
 

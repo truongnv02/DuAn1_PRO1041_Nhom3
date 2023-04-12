@@ -418,31 +418,16 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtDiaChi">
-                  <Properties>
-                    <Property name="enabled" type="boolean" value="false"/>
-                  </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtEmail">
-                  <Properties>
-                    <Property name="enabled" type="boolean" value="false"/>
-                  </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtSDT">
-                  <Properties>
-                    <Property name="enabled" type="boolean" value="false"/>
-                  </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtNgSinh">
-                  <Properties>
-                    <Property name="enabled" type="boolean" value="false"/>
-                  </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtMaHD">
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtTenKH">
-                  <Properties>
-                    <Property name="enabled" type="boolean" value="false"/>
-                  </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtGiaDien">
                 </Component>
@@ -453,7 +438,6 @@
                     </Property>
                     <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" value="Nam"/>
-                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="rdoNu">
@@ -462,13 +446,9 @@
                       <ComponentRef name="bgGioiTinh"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="N&#x1eef;"/>
-                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtCCCD">
-                  <Properties>
-                    <Property name="enabled" type="boolean" value="false"/>
-                  </Properties>
                 </Component>
                 <Component class="com.toedter.calendar.JDateChooser" name="dcNgTao">
                 </Component>

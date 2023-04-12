@@ -98,9 +98,7 @@ public class HopDongRepositoryImpl implements IHopDongRepository {
                              ,[GioiTinh]
                              ,[DiaChi]
                          FROM [dbo].[Khach_hang]
-                       WHERE Khach_hang.Id not in (SELECT dbo.Khach_hang.Id 
-                       						FROM     dbo.Khach_hang INNER JOIN
-                       						dbo.Phong_tro ON dbo.Khach_hang.Id = dbo.Phong_tro.IDKhachHang)
+                       
                        ORDER BY [MaKH]
                        """;
         try (Connection con = DBConnect.getConnection();
@@ -650,6 +648,41 @@ public class HopDongRepositoryImpl implements IHopDongRepository {
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
-        return null;}
+        return null;
+    }
 
+    @Override
+    public boolean addKH(KhachHang kh) {
+        int check = 0;
+        String query = """
+                       INSERT INTO [dbo].[Khach_hang]
+                                  ([Id]
+                                  ,[MaKH]
+                                  ,[TenKH]
+                                  ,[CCCD]
+                                  ,[NgaySinh]
+                                  ,[Email]
+                                  ,[SDT]
+                                  ,[GioiTinh]
+                                  ,[DiaChi])
+                            VALUES
+                                  (?,?,?,?,?,?,?,?,?)
+                       """;
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setObject(1, kh.getId());
+            ps.setObject(2, kh.getMa());
+            ps.setObject(3, kh.getTen());
+            ps.setObject(4, kh.getCccd());
+            ps.setObject(5, kh.getNgSinh());
+            ps.setObject(6, kh.getEmail());
+            ps.setObject(7, kh.getSdt());
+            ps.setObject(8, kh.isGioiTinh());
+            ps.setObject(9, kh.getDiaChi());
+            check = ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
+        return check > 0;
+    }
 }

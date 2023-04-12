@@ -151,4 +151,14 @@ public class HopDongServiceImpl implements IHopDongService {
         return hdri.getTSByIdTS(idTS);
     }
 
+    @Override
+    public String addKH(KhachHang kh) {
+        boolean add = hdri.addKH(kh);
+        if (add) {
+            return "Thêm Khách Hàng thành công!";
+        } else {
+            return "Thêm Khách Hàng thất bại!";
+        }
+    }
+
 }

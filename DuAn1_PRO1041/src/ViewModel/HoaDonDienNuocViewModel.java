@@ -23,12 +23,13 @@ public class HoaDonDienNuocViewModel {
     private double giaNuoc;
     private double tongTien;
     private double tienKhachDua;
+    private double tienThieu;
     private boolean TrangThai;
 
     public HoaDonDienNuocViewModel() {
     }
 
-    public HoaDonDienNuocViewModel(int stt, String maHD, String tenPhong, String tenKH, Date ngayDong, int soDien, int soNuoc, double giaDien, double giaNuoc, double tongTien, double tienKhachDua, boolean TrangThai) {
+    public HoaDonDienNuocViewModel(int stt, String maHD, String tenPhong, String tenKH, Date ngayDong, int soDien, int soNuoc, double giaDien, double giaNuoc, double tongTien, double tienKhachDua, double tienThieu, boolean TrangThai) {
         this.stt = stt;
         this.maHD = maHD;
         this.tenPhong = tenPhong;
@@ -40,10 +41,11 @@ public class HoaDonDienNuocViewModel {
         this.giaNuoc = giaNuoc;
         this.tongTien = tongTien;
         this.tienKhachDua = tienKhachDua;
+        this.tienThieu = tienThieu;
         this.TrangThai = TrangThai;
     }
 
-    public HoaDonDienNuocViewModel(int stt, String maHD, String tenPhong, String tenKH, Date ngayDong, int soDien, int soNuoc, double giaDien, double giaNuoc, double tongTien, boolean TrangThai) {
+    public HoaDonDienNuocViewModel(int stt, String maHD, String tenPhong, String tenKH, Date ngayDong, int soDien, int soNuoc, double giaDien, double giaNuoc, double tongTien, double tienThieu, boolean TrangThai) {
         this.stt = stt;
         this.maHD = maHD;
         this.tenPhong = tenPhong;
@@ -54,14 +56,10 @@ public class HoaDonDienNuocViewModel {
         this.giaDien = giaDien;
         this.giaNuoc = giaNuoc;
         this.tongTien = tongTien;
+        this.tienThieu = tienThieu;
         this.TrangThai = TrangThai;
     }
 
-    public HoaDonDienNuocViewModel(double giaDien, double giaNuoc) {
-        this.giaDien = giaDien;
-        this.giaNuoc = giaNuoc;
-    }
-    
     public int getStt() {
         return stt;
     }
@@ -142,6 +140,14 @@ public class HoaDonDienNuocViewModel {
         this.tienKhachDua = tienKhachDua;
     }
 
+    public double getTienThieu() {
+        return tienThieu;
+    }
+
+    public void setTienThieu(double tienThieu) {
+        this.tienThieu = tienThieu;
+    }
+
     public boolean isTrangThai() {
         return TrangThai;
     }
@@ -152,24 +158,25 @@ public class HoaDonDienNuocViewModel {
 
     
 
+    
+
     public String getTrangThai() {
         return TrangThai ? "Đã thanh toán" : "Chưa thanh toán";
     }
 
     public double getTongTien() {
-        
+
         tongTien = (soDien * giaDien) + (soNuoc * giaNuoc);
         return tongTien;
     }
 
     public double thieu() {
-        tienKhachDua = 0;
-        double tienThieu = 0;
-        tienThieu = getTongTien() - tienKhachDua;
+
+         tienThieu = getTongTien() - tienKhachDua;
         return tienThieu;
     }
 
     public Object[] toDataRow() {
-        return new Object[]{stt, maHD,tenPhong, tenKH, ngayDong, getTongTien(), tienKhachDua, thieu(), getTrangThai()};
+        return new Object[]{stt, maHD, tenPhong, tenKH, ngayDong, getTongTien(),tienThieu, getTrangThai()};
     }
 }
