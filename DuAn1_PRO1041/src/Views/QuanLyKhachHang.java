@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import Utilities.Support;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -278,14 +279,15 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-        if (txtMa.getText().trim().isEmpty()
+        if (txtMa.getText().trim().isEmpty() 
                 && txtTen.getText().trim().isEmpty()
                 && txtCCCD.getText().trim().isEmpty()
                 && txtNgaySinh.getText().trim().isEmpty()
                 && txtEmail.getText().trim().isEmpty()
                 && txtDiaChi.getText().trim().isEmpty()
-                && !txtSDT.getText().trim().isEmpty()) {
-            KhachHang kh = getDataFromView();
+                && !txtSDT.getText().trim().isEmpty()
+                ) {
+            KhachHang kh = getSDT();
             service.addNhanh(kh);
             lists = service.getAll();
             showDataTable(lists);
@@ -420,14 +422,20 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
         } else if (txtCCCD.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "CCCD không được để trống!");
             return false;
+        } else if (!checkCCCD(txtCCCD.getText().trim())) {
+            return false;
         } else if (txtNgaySinh.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ngày Sinh không được để trống!");
             return false;
         } else if (txtEmail.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Email không được để trống!");
             return false;
+        } else if (!checkEmail(txtEmail.getText().trim())) {
+            return false;
         } else if (txtSDT.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "SDT không được để trống!");
+            return false;
+        } else if (!checkSDT(txtSDT.getText().trim())) {
             return false;
         } else if (txtDiaChi.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Địa Chỉ không được để trống!");
@@ -496,13 +504,14 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
         return true;
     }
 
+
     public void detail(int index) {
         lists = service.getAll();
         KhachHang kh = lists.get(index);
         txtMa.setText(kh.getMa());
         txtTen.setText(kh.getTen());
         txtCCCD.setText(kh.getCccd());
-        txtNgaySinh.setText(Support.toString(kh.getNgSinh(), "dd/MM/yyyy"));
+        txtNgaySinh.setText(Support.toString(kh.getNgSinh()));
         txtEmail.setText(kh.getEmail());
         txtSDT.setText(kh.getSdt());
         if (kh.isGioiTinh() == true) {
@@ -518,7 +527,7 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
         String ma = txtMa.getText().trim();
         String ten = txtTen.getText().trim();
         String cccd = txtCCCD.getText().trim();
-        String ngSinh = txtNgaySinh.getText().trim();
+        Date ngSinh = Support.toDate(txtNgaySinh.getText());
         String email = txtEmail.getText().trim();
         String sdt = txtSDT.getText().trim();
         boolean gioiTinh = true;
@@ -526,7 +535,15 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
             gioiTinh = false;
         }
         String diaChi = txtDiaChi.getText().trim();
-        return new KhachHang(String.valueOf(id), ma, ten, cccd, Support.toDate(ngSinh, "dd/MM/yyyy"), email, sdt, gioiTinh, diaChi);
+        return new KhachHang(String.valueOf(id), ma, ten, cccd, ngSinh, email, sdt, gioiTinh, diaChi);
+    }
+
+    private KhachHang getSDT() {
+        KhachHang kh = new KhachHang();
+        UUID id = UUID.randomUUID();
+        kh.setId(String.valueOf(id));
+        kh.setSdt(txtSDT.getText());
+        return kh;
     }
 
     public List<KhachHang> timKiem(String sdt) {

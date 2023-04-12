@@ -113,7 +113,7 @@ public class KhachHang {
     }
 
     public Object[] toDataRow() {
-        SimpleDateFormat dateFomat = new SimpleDateFormat("dd/MM/yyyy");
-        return new Object[]{ma, ten, cccd, dateFomat.format(ngSinh), email, sdt, gioiTinh == true ? "Nam" : "Nữ", diaChi};
+//        SimpleDateFormat dateFomat = new SimpleDateFormat("dd/MM/yyyy");
+        return new Object[]{ma, ten, cccd, ngSinh, email, sdt, gioiTinh == true ? "Nam" : "Nữ", diaChi};
     }
 }
