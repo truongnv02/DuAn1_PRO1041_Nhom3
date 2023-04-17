@@ -156,10 +156,6 @@ public class HoaDonDienNuocViewModel {
         this.TrangThai = TrangThai;
     }
 
-    
-
-    
-
     public String getTrangThai() {
         return TrangThai ? "Đã thanh toán" : "Chưa thanh toán";
     }

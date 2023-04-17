@@ -94,8 +94,8 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
 
     private void clear() {
         txtMa.setEnabled(false);
-        cboPhong.setSelectedItem("");
-        dchNgayTao.setToolTipText("");
+        cboPhong.setSelectedItem(null);
+        dchNgayTao.setDate(null);
         txtDien.setText("");
         txtNuoc.setText("");
         txtTongTien.setEnabled(false);
@@ -377,7 +377,7 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
 
             },
             new String [] {
-                "STT", "Mã hóa đơn", "Phòng", "Tên khách hàng", "Ngày tạo", "Tổng tiền", "Tiền khách đưa", "Tiền thiếu", "Trạng thái"
+                "STT", "Mã hóa đơn", "Phòng", "Tên khách hàng", "Ngày tạo", "Tổng tiền", "Tiền thiếu", "Trạng thái"
             }
         ));
         tblHoaDonDienNuoc.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -529,16 +529,18 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
 
     private void btnMoiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMoiMouseClicked
         // TODO add your handling code here:
-        txtMa.setEnabled(false);
-        cboPhong.setSelectedItem("");
-        dchNgayTao.setToolTipText("");
+        txtMa.setText("");
+        cboPhong.setSelectedItem(null);
+        dchNgayTao.setDate(null);
+        txtTenKH.setText("");
+        txtGiaDien.setText("");
+        txtGiaNuoc.setText("");
         txtDien.setText("");
         txtNuoc.setText("");
-        txtTongTien.setEnabled(false);
+        txtTongTien.setText("");
         txtKhachDua.setText("");
         txtThieu.setText("");
         btnTT.clearSelection();
-        btnCapNhat.setEnabled(false);
         showDataTable(listHDVM);
         showDataTableP(listPhong);
         btnSoSanhTT.clearSelection();
@@ -555,7 +557,8 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
     private void txtKhachDuaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKhachDuaKeyReleased
         // TODO add your handling code here:
         double tienKhachDua = Double.parseDouble(txtKhachDua.getText());
-        double thieu = tienKhachDua - getTongTien();
+        double thieu = 0;
+        thieu = tienKhachDua - getTongTien();
         txtThieu.setText(String.valueOf(thieu));
     }//GEN-LAST:event_txtKhachDuaKeyReleased
 

@@ -750,19 +750,19 @@ public class QuanLyHopDong extends javax.swing.JFrame {
                 if (checkSDT(txtSDT.getText().trim()) && checkCCCD(txtCCCD.getText().trim()) && checkEmail(txtEmail.getText().trim())) {
                     KhachHang kh = getDataKHFromView();
                     service.addKH(kh);
-                }
-                if (checkData()) {
-                    if (checkMa()) {
-                        HopDong hd = getDataFromView();
-                        service.add(hd);
-                        for (HopDongTaiSan hdts : listHDTS) {
-                            hdts.setIdHD(hd.getId());
-                            service.addHDTS(hdts);
+                    if (checkData()) {
+                        if (checkMa()) {
+                            HopDong hd = getDataFromView();
+                            service.add(hd);
+                            for (HopDongTaiSan hdts : listHDTS) {
+                                hdts.setIdHD(hd.getId());
+                                service.addHDTS(hdts);
+                            }
+                            listHDTS.removeAll(listHDTS);
+                            dtm = (DefaultTableModel) tblListHDTS.getModel();
+                            showDataTableHDTS(listHDTS);
+                            showDataAll();
                         }
-                        listHDTS.removeAll(listHDTS);
-                        dtm = (DefaultTableModel) tblListHDTS.getModel();
-                        showDataTableHDTS(listHDTS);
-                        showDataAll();
                     }
                 }
             }
@@ -1132,6 +1132,12 @@ public class QuanLyHopDong extends javax.swing.JFrame {
 
     private KhachHang getDataKHFromView() {
         UUID id = UUID.randomUUID();
+        int kh = 0;
+        listKH = service.getListKH();
+        for (KhachHang khachHang : listKH) {
+            kh++;
+        }
+        String maKH = "KH0" + String.valueOf(kh + 1);
         String ten = txtTenKH.getText().trim();
         String cccd = txtCCCD.getText().trim();
         String ngSinh = txtNgSinh.getText().trim();
@@ -1142,7 +1148,7 @@ public class QuanLyHopDong extends javax.swing.JFrame {
             gioiTinh = false;
         }
         String diaChi = txtDiaChi.getText().trim();
-        return new KhachHang(String.valueOf(id), null, ten, cccd, Support.toDate(ngSinh, "dd/MM/yyyy"), email, sdt, gioiTinh, diaChi);
+        return new KhachHang(String.valueOf(id), maKH, ten, cccd, Support.toDate(ngSinh, "dd/MM/yyyy"), email, sdt, gioiTinh, diaChi);
     }
 
     public void detailHD(int index) {

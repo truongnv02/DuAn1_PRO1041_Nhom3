@@ -27,37 +27,38 @@ public class ManHinhChinh extends javax.swing.JFrame {
     private QuanLyKhachHang kh;
     private QuanLyTaiSan ts;
     private QuanLyHoaDonDienNuoc hddn;
+//    private FormHome home = new FormHome();
     
     public ManHinhChinh() {
         initComponents();
-//        setBackground(new Color(0, 0, 0, 0));          
-//        setForm(home.getRootPane());
-
+//        setBackground(new Color(0, 0, 0, 0)); 
+//        setForm(home);
+        
         menu.initMoving(ManHinhChinh.this);
         menu.addEventMenuSelected(new EventMenuSelected() {
             @Override
             public void selected(int index) {
-                if(index == 0) {
+                if(index == 1) {
                     pt = new QuanLyPhongTro();
                     setForm(pt.getRootPane());
-                }else if(index == 2) {
+                }else if(index == 3) {
                     hd = new QuanLyHopDong();
                     setForm(hd.getRootPane());
-                }else if(index == 4) {
+                }else if(index == 5) {
                     kh = new QuanLyKhachHang();
                     setForm(kh.getRootPane());
-                }else if(index == 6) {
+                }else if(index == 7) {
                     hddn = new QuanLyHoaDonDienNuoc();
                     setForm(hddn.getRootPane());
-                }else if(index == 8){
+                }else if(index == 9){
                     hdp = new QuanLyHoaDonPhong();
                     setForm(hdp.getRootPane());
-                }else if(index == 10) {
+                }else if(index == 11) {
                     ts = new QuanLyTaiSan();
                     setForm(ts.getRootPane());
-                }else if(index == 12) {
+                }else if(index == 13) {
                     
-                }else if(index == 14){
+                }else if(index == 15){
                     int confirm = JOptionPane.showConfirmDialog(rootPane, "Bạn có muốn thoát không ?");
                     if(confirm == JOptionPane.YES_OPTION) {
                         System.exit(0);

@@ -28,7 +28,7 @@ public class FormHome extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/home.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/chung-cu-mini.jpg"))); // NOI18N
         jLabel1.setPreferredSize(new java.awt.Dimension(849, 490));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

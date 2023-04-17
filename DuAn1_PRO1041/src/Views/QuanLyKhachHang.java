@@ -422,20 +422,14 @@ public class QuanLyKhachHang extends javax.swing.JFrame {
         } else if (txtCCCD.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "CCCD không được để trống!");
             return false;
-        } else if (!checkCCCD(txtCCCD.getText().trim())) {
-            return false;
         } else if (txtNgaySinh.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ngày Sinh không được để trống!");
             return false;
         } else if (txtEmail.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Email không được để trống!");
             return false;
-        } else if (!checkEmail(txtEmail.getText().trim())) {
-            return false;
         } else if (txtSDT.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "SDT không được để trống!");
-            return false;
-        } else if (!checkSDT(txtSDT.getText().trim())) {
             return false;
         } else if (txtDiaChi.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Địa Chỉ không được để trống!");
