@@ -24,6 +24,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -33,7 +34,7 @@ import javax.swing.JFileChooser;
  * @author Bânbân
  */
 public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
-
+    
     private DefaultTableModel dtm;
     private DefaultTableModel dtmP;
     private DefaultComboBoxModel dcbm;
@@ -56,6 +57,7 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
         iHoaDonDienNuocViewModelService = new HoaDonDienNuocViewModelServiceImpl();
         listHD = iHoaDonDienNuocService.getAll();
         list = iHoaDonDienNuocViewModelService.danhSachPhong();
+        listHDVM = new ArrayList<>();
         listHDVM = iHoaDonDienNuocViewModelService.danhSach();
         listPhong = iHoaDonDienNuocViewModelService.danhSachHDPhong();
         dtm = (DefaultTableModel) this.tblHoaDonDienNuoc.getModel();
@@ -68,23 +70,23 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
         txtTongTien.setEnabled(false);
         txtGiaDien.setEnabled(false);
         txtGiaNuoc.setEnabled(false);
-
+        
     }
-
+    
     private void showDataTable(List<HoaDonDienNuocViewModel> list) {
         dtm.setRowCount(0);
         for (HoaDonDienNuocViewModel hddnvm : list) {
             dtm.addRow(hddnvm.toDataRow());
         }
     }
-
+    
     private void showDataTableP(List<PhongTroHDViewModel> list) {
         dtmP.setRowCount(0);
         for (PhongTroHDViewModel pthdvm : list) {
             dtmP.addRow(pthdvm.toDataRow());
         }
     }
-
+    
     private void showComBoBox(List<String> list) {
         dcbm.removeAllElements();
         for (String s : list) {
@@ -92,21 +94,6 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
         }
     }
 
-    private void clear() {
-        txtMa.setEnabled(false);
-        cboPhong.setSelectedItem(null);
-        dchNgayTao.setDate(null);
-        txtDien.setText("");
-        txtNuoc.setText("");
-        txtTongTien.setEnabled(false);
-        txtKhachDua.setText("");
-        txtThieu.setText("");
-        btnTT.clearSelection();
-        btnCapNhat.setEnabled(false);
-        showDataTable(listHDVM);
-        showDataTableP(listPhong);
-        btnSoSanhTT.clearSelection();
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -377,7 +364,7 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
 
             },
             new String [] {
-                "STT", "Mã hóa đơn", "Phòng", "Tên khách hàng", "Ngày tạo", "Tổng tiền", "Tiền thiếu", "Trạng thái"
+                "STT", "Mã hóa đơn", "Phòng", "Tên khách hàng", "Ngày tạo", "Tổng tiền", "Tiền thiếu/Đủ", "Trạng thái"
             }
         ));
         tblHoaDonDienNuoc.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -517,7 +504,7 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
         int rowIndex = tblHoaDonDienNuoc.getSelectedRow();
         if (rowIndex >= 0) {
             HoaDonDienNuoc hddn = getDataFormView();
-            txtTongTien.setText(getTongTien() + "");
+//            txtTongTien.setText(getTongTien() + "");
             iHoaDonDienNuocService.sua(ma, hddn);
             listHDVM = iHoaDonDienNuocViewModelService.danhSach();
             showDataTable(listHDVM);
@@ -532,17 +519,18 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
         txtMa.setText("");
         cboPhong.setSelectedItem(null);
         dchNgayTao.setDate(null);
-        txtTenKH.setText("");
-        txtGiaDien.setText("");
-        txtGiaNuoc.setText("");
         txtDien.setText("");
         txtNuoc.setText("");
         txtTongTien.setText("");
         txtKhachDua.setText("");
+        txtTenKH.setText("");
+        txtGiaDien.setText("");
+        txtGiaNuoc.setText("");
         txtThieu.setText("");
         btnTT.clearSelection();
         showDataTable(listHDVM);
         showDataTableP(listPhong);
+        tblPhongTro.setEnabled(true);
         btnSoSanhTT.clearSelection();
 
     }//GEN-LAST:event_btnMoiMouseClicked
@@ -614,24 +602,23 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
         if (x == JFileChooser.APPROVE_OPTION) {
             jFileChooser.getSelectedFile().getPath();
         }
-
+        
         Document doc = new Document();
         try {
-            PdfWriter.getInstance(doc, new FileOutputStream(path + "abc.pdf"));
-
+            PdfWriter.getInstance(doc, new FileOutputStream(path + "hoadondiennuoc.pdf"));
+            
             doc.open();
-
-            PdfPTable tbl = new PdfPTable(9);
+            
+            PdfPTable tbl = new PdfPTable(8);
             tbl.addCell("STT");
             tbl.addCell("Mã hóa đơn");
             tbl.addCell("Phòng");
             tbl.addCell("Tên khách hàng");
             tbl.addCell("Ngày tạo");
             tbl.addCell("Tổng tiền");
-            tbl.addCell("Tiền khách đưa");
             tbl.addCell("Tiền thiếu");
             tbl.addCell("Trạng thái");
-
+            
             for (int i = 0; i < tblHoaDonDienNuoc.getRowCount(); i++) {
                 int stt = (int) tblHoaDonDienNuoc.getValueAt(i, 0);
                 String ma = tblHoaDonDienNuoc.getValueAt(i, 1).toString();
@@ -639,22 +626,19 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
                 String tenKH = tblHoaDonDienNuoc.getValueAt(i, 3).toString();
                 Date ngayTao = (Date) tblHoaDonDienNuoc.getValueAt(i, 4);
                 double tongTien = (double) tblHoaDonDienNuoc.getValueAt(i, 5);
-                double tienKhachDua = (double) tblHoaDonDienNuoc.getValueAt(i, 6);
-                double tienThua = (double) tblHoaDonDienNuoc.getValueAt(i, 7);
-                String trangThai = tblHoaDonDienNuoc.getValueAt(i, 8).toString();
-
+                double tienThua = (double) tblHoaDonDienNuoc.getValueAt(i, 6);
+                String trangThai = tblHoaDonDienNuoc.getValueAt(i, 7).toString();
                 tbl.addCell(stt + "");
                 tbl.addCell(ma);
                 tbl.addCell(phong);
                 tbl.addCell(tenKH);
                 tbl.addCell(ngayTao + "");
                 tbl.addCell(tongTien + "");
-                tbl.addCell(tienKhachDua + "");
                 tbl.addCell(tienThua + "");
                 tbl.addCell(trangThai + "");
             }
             doc.add(tbl);
-
+            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(QuanLyHoaDonDienNuoc.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DocumentException ex) {
@@ -673,21 +657,21 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
         txtNuoc.setText(hddnvm.getSoNuoc() + "");
         txtGiaNuoc.setText(hddnvm.getGiaNuoc() + "");
         txtTongTien.setText(getTongTien() + "");
-        txtThieu.setText(hddnvm.thieu() + "");
+        txtThieu.setText(hddnvm.getTienThieu() + "");
         if (hddnvm.isTrangThai()) {
             rdoDaTT.setSelected(true);
         } else {
             rdoChuaTT.setSelected(true);
         }
-
+        
     }
-
+    
     private void detailPhong(int index) {
         PhongTroHDViewModel pthdvm = listPhong.get(index);
         cboPhong.setSelectedItem(pthdvm.getTenPhong());
         txtTenKH.setText(pthdvm.getTenKH());
     }
-
+    
     private HoaDonDienNuoc getDataFormView() {
         String maHD = "HĐ00";
         int stt = 1;
@@ -710,6 +694,8 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
         hddn.setIdHopDong(hopDong);
         double tongTien = Double.parseDouble(txtTongTien.getText());
         hddn.setTongTien(tongTien);
+        double tienThieu = Double.parseDouble(txtThieu.getText());
+        hddn.setTienThieu(tienThieu);
         int soDien = Integer.parseInt(txtDien.getText());
         hddn.setSoDien(soDien);
         int soNuoc = Integer.parseInt(txtNuoc.getText());
@@ -721,7 +707,7 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
         hddn.setTrangThai(trangThai);
         return hddn;
     }
-
+    
     private boolean checkValidate() {
         if (txtDien.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Số điện không được bỏ trống!");
@@ -738,7 +724,7 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
         }
         return true;
     }
-
+    
     public double getTongTien() {
         double tongTien = 0;
         double tienDien = Integer.parseInt(txtDien.getText()) * Double.parseDouble(txtGiaDien.getText());
@@ -746,7 +732,7 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
         tongTien = tienDien + tienNuoc;
         return tongTien;
     }
-
+    
     public boolean checkMa() {
         String ma = txtMa.getText().trim();
         for (HoaDonDienNuocViewModel hddnvm : listHDVM) {
@@ -783,6 +769,8 @@ public class QuanLyHoaDonDienNuoc extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(QuanLyHoaDonDienNuoc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

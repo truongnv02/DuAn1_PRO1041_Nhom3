@@ -730,17 +730,19 @@ public class QuanLyHopDong extends javax.swing.JFrame {
             if (sdt.equalsIgnoreCase(kh.getSdt())) {
                 dem++;
                 if (checkData()) {
-                    if (checkMa()) {
-                        HopDong hd = getDataFromView();
-                        service.add(hd);
-                        for (HopDongTaiSan hdts : listHDTS) {
-                            hdts.setIdHD(hd.getId());
-                            service.addHDTS(hdts);
+                    if (checkPhong()) {
+                        if (checkMa()) {
+                            HopDong hd = getDataFromView();
+                            service.add(hd);
+                            for (HopDongTaiSan hdts : listHDTS) {
+                                hdts.setIdHD(hd.getId());
+                                service.addHDTS(hdts);
+                            }
+                            listHDTS.removeAll(listHDTS);
+                            dtm = (DefaultTableModel) tblListHDTS.getModel();
+                            showDataTableHDTS(listHDTS);
+                            showDataAll();
                         }
-                        listHDTS.removeAll(listHDTS);
-                        dtm = (DefaultTableModel) tblListHDTS.getModel();
-                        showDataTableHDTS(listHDTS);
-                        showDataAll();
                     }
                 }
             }
@@ -962,8 +964,6 @@ public class QuanLyHopDong extends javax.swing.JFrame {
             return false;
         } else if (txtPhong.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn Phòng");
-            return false;
-        } else if (!checkPhong()) {
             return false;
         } else if (txtTienCoc.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tiền Cọc không được bỏ trống!");
